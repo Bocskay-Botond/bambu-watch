@@ -135,7 +135,7 @@ adb connect <watch-ip>:<port>
 Being upfront about what this is: a personal project that works well for me, not a polished product.
 
 - **Your password is never stored.** The phone keeps only the Bambu access token, in app-private storage.
-- ⚠️ **The MQTT connection does not verify the TLS certificate** (trust-all socket factory). That's fine on a home network but not ideal. Validating against the system trust store is the #1 item on the to-do list.
+- 🔐 **TLS is fully verified** (since v1.0.1): the MQTT connection checks the broker's certificate against Android's system trust store **and** its hostname (`*.mqtt.bambulab.com`, issued by DigiCert).
 - Only the **first printer** on the account is monitored.
 - MQTT uses the **`us`** broker, which serves global accounts. China-region accounts would need `cn.mqtt.bambulab.com`.
 - Polling every second is simple but not battery-optimal.
@@ -144,7 +144,7 @@ Being upfront about what this is: a personal project that works well for me, not
 
 ## 🗺️ Roadmap / Ideas
 
-- [ ] Verify the MQTT TLS certificate
+- [x] Verify the MQTT TLS certificate *(v1.0.1)*
 - [ ] English UI strings (and auto language switch)
 - [ ] Multiple printers, with a picker on the watch
 - [ ] Watch **complication** (progress ring on the watch face)

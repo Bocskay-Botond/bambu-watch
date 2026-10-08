@@ -3,11 +3,7 @@ package com.bambu.watch
 import org.eclipse.paho.client.mqttv3.*
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.json.JSONObject
-import java.security.SecureRandom
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
+import javax.net.ssl.SSLSocketFactory
 
 class BambuMqttClient(
     private val devId: String,
@@ -29,7 +25,10 @@ class BambuMqttClient(
                 isCleanSession    = true
                 connectionTimeout = 15
                 keepAliveInterval = 60
-                socketFactory     = trustAllSslFactory()
+                // A broker publikusan megbízható (DigiCert) tanúsítványt ad:
+                // a rendszer trust store-ja ellenőrzi, a hosztnevet is.
+                socketFactory     = SSLSocketFactory.getDefault()
+                isHttpsHostnameVerificationEnabled = true
             }
 
             client?.setCallback(object : MqttCallback {
@@ -94,16 +93,5 @@ class BambuMqttClient(
                 onData(nozzle, nozzleTarget, bed, bedTarget, progress, remainingMin, state, filename)
             }
         } catch (_: Exception) {}
-    }
-
-    private fun trustAllSslFactory(): javax.net.ssl.SSLSocketFactory {
-        val trustAll = arrayOf<TrustManager>(object : X509TrustManager {
-            override fun checkClientTrusted(c: Array<X509Certificate>, a: String) {}
-            override fun checkServerTrusted(c: Array<X509Certificate>, a: String) {}
-            override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
-        })
-        return SSLContext.getInstance("TLS").apply {
-            init(null, trustAll, SecureRandom())
-        }.socketFactory
     }
 }
