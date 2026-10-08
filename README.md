@@ -69,6 +69,19 @@ BambuWatch/
 
 ## 🔨 Installation
 
+### ⚡ Option A: download the APKs (no build needed)
+
+Grab both files from the **[latest release](https://github.com/Bocskay-Botond/bambu-watch/releases/latest)**:
+
+| File | Install on |
+|---|---|
+| `bambu-watch-phone-v*.apk` | 📱 phone: open it and allow "install unknown apps" |
+| `bambu-watch-wear-v*.apk` | ⌚ watch: `adb install bambu-watch-wear-v*.apk` (see step 3 below for connecting) |
+
+Always install the phone and watch APK **from the same release**. They have to be signed with the same key to talk to each other. Then jump to [4. Use it](#4-use-it).
+
+### 🛠️ Option B: build it yourself
+
 ### 1. Build
 
 ```bash
@@ -111,7 +124,7 @@ adb connect <watch-ip>:<port>
 |---|---|
 | Tile shows `TÉTLEN` (idle) and 0% | Open the phone app: the status line shows the sync debug info. Check that the printer is online in Bambu Handy. |
 | Login says `verifyCode` / nothing happens | Your account has 2FA: wait for the code field, enter the 6-digit code from the email. |
-| Tile never updates | Phone and watch apps must have the same `applicationId` **and** signature, so reinstall both from the same build machine. |
+| Tile never updates | Phone and watch apps must have the same `applicationId` **and** signature, so install both from the same release (or build both on the same machine). Don't mix a release APK with your own build. |
 | No temperatures | They come only from MQTT. Check the phone notification: `N:0° B:0°` means MQTT isn't connected yet (it retries every 5 s). |
 | Battery drain on the phone | The service polls every second. Tap **SZINKRONIZÁLÁS LEÁLLÍTÁSA** (stop sync) in the app when you're not printing. |
 
