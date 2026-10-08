@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #07090c; --cyan: #00bfff; --green: #00ff88; --cream: #eef3f7; --dim: #7d8a96; --line: #1d252e; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 640px; overflow: hidden; }
+  body {
+    font-family: Inter, sans-serif; color: var(--cream); position: relative;
+    background:
+      radial-gradient(700px 520px at 78% 50%, rgba(0,191,255,.20), transparent 62%),
+      radial-gradient(600px 420px at 0% 100%, rgba(0,255,136,.10), transparent 60%),
+      var(--bg);
+  }
+  .grid {
+    position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: radial-gradient(700px 480px at 30% 50%, #000 15%, transparent 75%);
+  }
+  .left { position: absolute; left: 76px; top: 0; bottom: 0; width: 600px; display: flex; flex-direction: column; justify-content: center; }
+  .kicker { font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 700; color: var(--cyan); letter-spacing: 1px; margin-bottom: 16px; }
+  h1 { font-weight: 900; font-size: 92px; letter-spacing: -3px; line-height: .95; }
+  h1 span { color: var(--cyan); }
+  .tag { margin-top: 22px; font-size: 27px; line-height: 1.35; color: #b9c4ce; font-weight: 500; max-width: 540px; }
+  .chips { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; padding: 8px 14px; border-radius: 999px; border: 1.5px solid #26313c; background: rgba(255,255,255,.03); color: #cfd8e0; }
+  .url { position: absolute; left: 76px; bottom: 40px; font-family: 'JetBrains Mono', monospace; font-size: 17px; color: var(--dim); }
+  .url b { color: var(--cream); font-weight: 700; }
+
+  /* watch */
+  .watch { position: absolute; right: 150px; top: 50%; transform: translateY(-50%); width: 400px; height: 400px; }
+  .strap { position: absolute; left: 50%; transform: translateX(-50%); width: 210px; height: 140px; background: linear-gradient(#1b2026, #0e1115); border-radius: 30px; }
+  .strap.top { top: -95px; } .strap.bot { bottom: -95px; }
+  .bezel {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, #5a636d, #20262c 45%, #0b0e11 75%);
+    box-shadow: 0 40px 90px rgba(0,0,0,.7), 0 0 0 2px #2b333b inset;
+  }
+  .crown { position: absolute; right: -14px; top: 140px; width: 20px; height: 44px; border-radius: 6px; background: linear-gradient(90deg, #3a424a, #15191d); }
+  .crown.b { top: 216px; }
+  .screen {
+    position: absolute; inset: 22px; border-radius: 50%; background: #000; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: Inter, sans-serif;
+  }
+  .hdr { font-size: 15px; color: #888; font-weight: 500; }
+  .hdr .on { color: var(--green); margin: 0 6px; }
+  .hdr .st { color: var(--cyan); font-weight: 700; }
+  .thumb {
+    width: 92px; height: 92px; margin: 10px 0 4px; border-radius: 6px; position: relative; overflow: hidden;
+    background: linear-gradient(160deg, #2a2f36, #15181c);
+  }
+  .plate { position: absolute; left: 8px; right: 8px; bottom: 12px; height: 12px; background: linear-gradient(#454c55,#2b3138); transform: skewX(-20deg); border-radius: 2px; }
+  .boat { position: absolute; left: 22px; bottom: 22px; width: 50px; height: 26px; background: linear-gradient(#ff8a3d, #e0601d); border-radius: 4px 4px 14px 14px; }
+  .cabin { position: absolute; left: 34px; bottom: 46px; width: 24px; height: 20px; background: linear-gradient(#ff9b52, #e86a22); border-radius: 3px; }
+  .chim { position: absolute; left: 48px; bottom: 64px; width: 8px; height: 12px; background: #ff9b52; border-radius: 2px; }
+  .pct { font-size: 52px; font-weight: 900; line-height: 1; margin-top: 2px; }
+  .bar { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--cyan); letter-spacing: -0.5px; margin-top: 6px; }
+  .file { font-size: 14px; color: var(--cyan); margin-top: 6px; font-weight: 500; }
+  .temps { font-size: 14px; margin-top: 5px; font-weight: 500; }
+  .eta { font-size: 15px; color: #aaa; margin-top: 4px; }
+
+  /* phone notification */
+  .notif {
+    position: absolute; z-index: 5; right: 420px; bottom: 84px; width: 330px; white-space: nowrap; padding: 12px 14px; border-radius: 16px;
+    background: rgba(24,30,37,.92); border: 1px solid #2a343e; box-shadow: 0 20px 50px rgba(0,0,0,.5);
+    font-size: 13px; color: #cfd8e0; backdrop-filter: blur(6px);
+  }
+  .notif .app { font-size: 11px; color: var(--dim); margin-bottom: 4px; display: flex; gap: 6px; align-items: center; }
+  .notif .app i { width: 14px; height: 14px; border-radius: 4px; background: var(--cyan); display: inline-block; }
+  .notif b { color: #fff; }
+  .badge { position: absolute; z-index: 5; right: 330px; top: 92px; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--green); border: 1.5px solid rgba(0,255,136,.35); background: rgba(0,255,136,.08); padding: 6px 12px; border-radius: 999px; }
+</style>
+</head>
+<body>
+<div class="grid"></div>
+
+<div class="left">
+  <div class="kicker">// BAMBU LAB A1 · WEAR OS</div>
+  <h1>Bambu<span>Watch</span></h1>
+  <div class="tag">Your 3D printer, live on your wrist: progress, temps &amp; ETA on a watch tile.</div>
+  <div class="chips">
+    <div class="chip">⌚ Wear OS tile</div>
+    <div class="chip">📡 MQTT live data</div>
+    <div class="chip">🔐 2FA login</div>
+    <div class="chip">🖼️ print thumbnail</div>
+  </div>
+</div>
+<div class="url">github.com/<b>Bocskay-Botond/bambu-watch</b></div>
+
+<div class="badge">● live · every 1s</div>
+
+<div class="notif">
+  <div class="app"><i></i>Bambu Watch · now</div>
+  <b>67%</b> — benchy_0.2mm.gcode | N:220° B:65°
+</div>
+
+<div class="watch">
+  <div class="strap top"></div><div class="strap bot"></div>
+  <div class="bezel"></div>
+  <div class="crown"></div><div class="crown b"></div>
+  <div class="screen">
+    <div class="hdr">A1<span class="on">●</span><span class="st">NYOMTAT</span></div>
+    <div class="thumb"><div class="plate"></div><div class="boat"></div><div class="cabin"></div><div class="chim"></div></div>
+    <div class="pct">67%</div>
+    <div class="bar">█████████████░░░░░░░</div>
+    <div class="file">benchy_0.2mm…</div>
+    <div class="temps"><span style="color:#ff8c00">N:220°/220°</span>&nbsp;&nbsp;<span style="color:#ff6b6b">B:65°/65°</span></div>
+    <div class="eta">Kész: 21:45</div>
+  </div>
+</div>
+</body>
+</html>
